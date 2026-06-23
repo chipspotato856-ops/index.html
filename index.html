@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LeadBot — AI Chat Widget for Insurance Agencies</title>
+<meta name="description" content="A 24/7 AI chat widget that captures and qualifies insurance leads directly from your website.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --navy: #0B1640;
+    --blue: #1A47E0;
+    --blue-light: #E6ECFF;
+    --ink: #0A0A0A;
+    --muted: #5C6378;
+    --bg: #F6F7FB;
+    --white: #FFFFFF;
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.6;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--navy);
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    position: sticky;
+    top: 0;
+    background: rgba(246,247,251,0.85);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+    border-bottom: 1px solid rgba(11,22,64,0.06);
+  }
+  nav .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 24px;
+  }
+  .logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .logo span {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--blue);
+    display: inline-block;
+  }
+  .nav-links { display: flex; gap: 32px; font-size: 14px; font-weight: 600; }
+  .nav-links a { color: var(--navy); text-decoration: none; }
+  .nav-cta {
+    background: var(--navy);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  @media (max-width: 720px) {
+    .nav-links { display: none; }
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: 100px 0 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -200px; right: -200px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, var(--blue-light) 0%, transparent 70%);
+    z-index: 0;
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 60px;
+    align-items: center;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--blue-light);
+    color: var(--blue);
+    font-weight: 600;
+    font-size: 13px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 24px;
+  }
+  .eyebrow::before { content: '●'; font-size: 10px; }
+
+  h1 {
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+  h1 em {
+    font-style: normal;
+    color: var(--blue);
+  }
+  .hero p.lead {
+    font-size: 18px;
+    color: var(--muted);
+    max-width: 480px;
+    margin-bottom: 32px;
+  }
+  .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn-primary, .btn-secondary {
+    font-weight: 600;
+    font-size: 15px;
+    padding: 15px 28px;
+    border-radius: 999px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    cursor: pointer;
+  }
+  .btn-primary {
+    background: var(--blue);
+    color: #fff;
+  }
+  .btn-secondary {
+    background: #fff;
+    color: var(--navy);
+    border: 1px solid rgba(11,22,64,0.12);
+  }
+
+  /* hero mockup card */
+  .hero-visual {
+    background: var(--navy);
+    border-radius: 20px;
+    padding: 28px;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(11,22,64,0.25);
+  }
+  .hero-visual .browser-bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .hero-visual .browser-bar span {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+  }
+  .hero-visual .mock-text {
+    background: rgba(255,255,255,0.06);
+    border-radius: 8px;
+    height: 14px;
+    margin-bottom: 10px;
+  }
+  .hero-visual .mock-text.short { width: 60%; }
+  .hero-visual .mock-text.medium { width: 80%; }
+  .hero-visual .chat-preview {
+    background: #fff;
+    border-radius: 12px;
+    padding: 14px;
+    margin-top: 20px;
+  }
+  .chat-preview .row { display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start; }
+  .chat-preview .av {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--blue-light); color: var(--blue);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; flex-shrink: 0;
+  }
+  .chat-preview .bubble {
+    background: var(--bg);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .chat-preview .bubble.user {
+    background: var(--blue);
+    color: #fff;
+    margin-left: auto;
+  }
+  .chat-preview .row.right { justify-content: flex-end; }
+
+  @media (max-width: 860px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero { padding: 60px 0 40px; }
+  }
+
+  /* ===== LOGOS / TRUST ===== */
+  .trust {
+    padding: 40px 0;
+    border-top: 1px solid rgba(11,22,64,0.06);
+    border-bottom: 1px solid rgba(11,22,64,0.06);
+  }
+  .trust p {
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 24px;
+    font-weight: 600;
+  }
+  .trust-row {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    flex-wrap: wrap;
+    opacity: 0.5;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--navy);
+  }
+
+  /* ===== HOW IT WORKS ===== */
+  .section { padding: 90px 0; }
+  .section-head {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 56px;
+  }
+  .section-head .eyebrow { margin-bottom: 16px; }
+  .section-head h2 { font-size: clamp(28px, 4vw, 38px); margin-bottom: 12px; }
+  .section-head p { color: var(--muted); font-size: 16px; }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+  .step-card {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    border: 1px solid rgba(11,22,64,0.06);
+    position: relative;
+  }
+  .step-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--blue);
+    background: var(--blue-light);
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px;
+  }
+  .step-card h3 { font-size: 18px; margin-bottom: 10px; }
+  .step-card p { color: var(--muted); font-size: 14px; }
+
+  @media (max-width: 860px) {
+    .steps { grid-template-columns: 1fr; }
+  }
+
+  /* ===== BENEFITS ===== */
+  .benefits {
+    background: var(--navy);
+    border-radius: 24px;
+    padding: 64px 48px;
+    color: #fff;
+  }
+  .benefits .section-head h2,
+  .benefits .section-head p { color: #fff; }
+  .benefits .section-head p { color: rgba(255,255,255,0.65); }
+  .benefit-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+  }
+  .benefit-item { display: flex; gap: 16px; }
+  .benefit-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: rgba(26,71,224,0.2);
+    color: #6F94FF;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 20px;
+    font-weight: 700;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .benefit-item h3 { color: #fff; font-size: 16px; margin-bottom: 6px; }
+  .benefit-item p { color: rgba(255,255,255,0.6); font-size: 14px; }
+
+  @media (max-width: 860px) {
+    .benefits { padding: 40px 24px; }
+    .benefit-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ===== TRY IT ===== */
+  .try-section {
+    text-align: center;
+  }
+  .try-section .hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    border: 1px solid rgba(11,22,64,0.1);
+    border-radius: 999px;
+    padding: 12px 24px;
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 12px;
+  }
+  .try-section .hint b { color: var(--navy); }
+  .pointer {
+    font-size: 28px;
+    display: inline-block;
+    margin-top: 24px;
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0) rotate(20deg); }
+    50% { transform: translateY(10px) rotate(20deg); }
+  }
+
+  /* ===== PRICING ===== */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .price-card {
+    background: #fff;
+    border-radius: var(--radius);
+    border: 1px solid rgba(11,22,64,0.06);
+    padding: 32px;
+    text-align: center;
+  }
+  .price-card.featured {
+    border: 2px solid var(--blue);
+    position: relative;
+    transform: translateY(-8px);
+  }
+  .price-card .badge {
+    position: absolute;
+    top: -12px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--blue);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 14px;
+    border-radius: 999px;
+  }
+  .price-card h3 { font-size: 18px; margin-bottom: 8px; }
+  .price-card .price {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 16px 0 4px;
+  }
+  .price-card .price span { font-size: 14px; color: var(--muted); font-weight: 400; }
+  .price-card ul {
+    list-style: none;
+    margin: 24px 0;
+    text-align: left;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .price-card ul li {
+    padding: 8px 0;
+    border-top: 1px solid rgba(11,22,64,0.06);
+  }
+  .price-card ul li::before { content: '✓ '; color: var(--blue); font-weight: 700; }
+
+  @media (max-width: 860px) {
+    .pricing-grid { grid-template-columns: 1fr; }
+    .price-card.featured { transform: none; }
+  }
+
+  /* ===== CONTACT / FOOTER ===== */
+  footer {
+    background: var(--navy);
+    color: #fff;
+    padding: 64px 0 32px;
+    margin-top: 40px;
+  }
+  .footer-cta {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .footer-cta h2 { color: #fff; font-size: clamp(28px, 4vw, 38px); margin-bottom: 16px; }
+  .footer-cta p { color: rgba(255,255,255,0.6); margin-bottom: 28px; }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 24px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-bottom .logo { color: #fff; font-size: 16px; }
+  footer .btn-primary { background: #fff; color: var(--navy); }
+
+  @media (max-width: 600px) {
+    .footer-bottom { flex-direction: column; text-align: center; }
+  }
+
+  /* fade-in animation */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <div class="logo"><span></span>LeadBot</div>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#benefits">Benefits</a>
+      <a href="#pricing">Pricing</a>
+    </div>
+    <a class="nav-cta" href="#contact">Book a demo</a>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="fade-up visible">
+      <div class="eyebrow">For insurance agencies</div>
+      <h1>Turn website visitors into <em>booked leads</em> — even while you sleep</h1>
+      <p class="lead">LeadBot is an AI chat widget that greets every visitor, asks the right questions, and delivers qualified leads straight to your inbox or CRM — 24 hours a day.</p>
+      <div class="hero-ctas">
+        <a href="#contact" class="btn-primary">Get LeadBot on your site →</a>
+        <a href="#how" class="btn-secondary">See how it works</a>
+      </div>
+    </div>
+
+    <div class="hero-visual fade-up visible">
+      <div class="browser-bar"><span></span><span></span><span></span></div>
+      <div class="mock-text medium"></div>
+      <div class="mock-text short"></div>
+      <div class="mock-text" style="width: 70%;"></div>
+
+      <div class="chat-preview">
+        <div class="row">
+          <div class="av">AI</div>
+          <div class="bubble">Hi! What type of coverage are you looking for?</div>
+        </div>
+        <div class="row right">
+          <div class="bubble user">Auto insurance</div>
+        </div>
+        <div class="row">
+          <div class="av">AI</div>
+          <div class="bubble">Got it — what's your name and number? I'll connect you with a local agent.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TRUST BAR ===== -->
+<section class="trust">
+  <div class="container">
+    <p>Built for agencies that want more leads, not more work</p>
+    <div class="trust-row">
+      <span>24/7 Availability</span>
+      <span>No Coding Needed</span>
+      <span>Setup in Minutes</span>
+      <span>Works on Any Website</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section class="section" id="how">
+  <div class="container">
+    <div class="section-head fade-up">
+      <div class="eyebrow">How it works</div>
+      <h2>Up and running in three simple steps</h2>
+      <p>No developers, no IT department, no monthly maintenance from your end.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step-card fade-up">
+        <div class="step-num">1</div>
+        <h3>We add the chat widget</h3>
+        <p>A small snippet is added to your existing website — takes minutes and doesn't change your design.</p>
+      </div>
+      <div class="step-card fade-up">
+        <div class="step-num">2</div>
+        <h3>Visitors get greeted instantly</h3>
+        <p>Every visitor is asked about their coverage needs, name, phone, and zip code — automatically.</p>
+      </div>
+      <div class="step-card fade-up">
+        <div class="step-num">3</div>
+        <h3>You receive the lead</h3>
+        <p>Completed conversations are sent straight to your email, Google Sheet, or CRM in real time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BENEFITS ===== -->
+<section class="section" id="benefits">
+  <div class="container">
+    <div class="benefits fade-up">
+      <div class="section-head">
+        <div class="eyebrow">Why agencies use LeadBot</div>
+        <h2>Capture leads you're currently losing</h2>
+        <p>Most visitors leave without calling. LeadBot makes sure they don't leave without being captured.</p>
+      </div>
+
+      <div class="benefit-grid">
+        <div class="benefit-item">
+          <div class="benefit-icon">24</div>
+          <div>
+            <h3>Always available</h3>
+            <p>Evenings, weekends, holidays — LeadBot never misses a visitor.</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">⚡</div>
+          <div>
+            <h3>Instant lead delivery</h3>
+            <p>Get notified the moment someone completes the chat — no delays.</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">🎯</div>
+          <div>
+            <h3>Pre-qualified leads</h3>
+            <p>You receive coverage type, contact info, and location — ready to call.</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">🔧</div>
+          <div>
+            <h3>Zero maintenance</h3>
+            <p>We handle setup and updates. You just receive the leads.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TRY IT ===== -->
+<section class="section try-section" id="try">
+  <div class="container">
+    <div class="section-head fade-up">
+      <div class="eyebrow">Live demo</div>
+      <h2>Try LeadBot right now</h2>
+      <p>This is the exact widget that would sit on your website. Click the chat bubble in the bottom-right corner.</p>
+    </div>
+    <div class="hint fade-up">
+      <span>👉</span> Look for the <b>blue chat bubble</b> in the bottom-right corner of this page
+    </div>
+    <div class="pointer">↘</div>
+  </div>
+</section>
+
+<!-- ===== PRICING ===== -->
+<section class="section" id="pricing">
+  <div class="container">
+    <div class="section-head fade-up">
+      <div class="eyebrow">Simple pricing</div>
+      <h2>One flat monthly fee. Cancel anytime.</h2>
+      <p>No setup fees. No long-term contracts. Start with a free trial.</p>
+    </div>
+
+    <div class="pricing-grid">
+      <div class="price-card fade-up">
+        <h3>Starter</h3>
+        <div class="price">$0 <span>/ 14 days</span></div>
+        <ul>
+          <li>Full widget installed</li>
+          <li>Unlimited conversations</li>
+          <li>Leads sent to your email</li>
+          <li>No credit card required</li>
+        </ul>
+        <a href="#contact" class="btn-secondary" style="width:100%; justify-content:center;">Start free trial</a>
+      </div>
+
+      <div class="price-card featured fade-up">
+        <div class="badge">Most popular</div>
+        <h3>Growth</h3>
+        <div class="price">$199 <span>/ month</span></div>
+        <ul>
+          <li>Everything in Starter</li>
+          <li>Custom branding & colors</li>
+          <li>Leads sent to email + Sheet/CRM</li>
+          <li>Monthly performance summary</li>
+        </ul>
+        <a href="#contact" class="btn-primary" style="width:100%; justify-content:center;">Get started</a>
+      </div>
+
+      <div class="price-card fade-up">
+        <h3>Pro</h3>
+        <div class="price">$349 <span>/ month</span></div>
+        <ul>
+          <li>Everything in Growth</li>
+          <li>Multi-location support</li>
+          <li>Priority changes & support</li>
+          <li>Quarterly strategy check-in</li>
+        </ul>
+        <a href="#contact" class="btn-secondary" style="width:100%; justify-content:center;">Get started</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER / CONTACT ===== -->
+<footer id="contact">
+  <div class="container">
+    <div class="footer-cta">
+      <h2>Ready to capture more leads?</h2>
+      <p>Get LeadBot installed on your website this week — free for the first 14 days.</p>
+      <a href="mailto:you@example.com?subject=I'm%20interested%20in%20LeadBot" class="btn-primary">Email us to get started →</a>
+    </div>
+    <div class="footer-bottom">
+      <div class="logo"><span style="background:#6F94FF; width:10px; height:10px; border-radius:50%; display:inline-block;"></span>LeadBot</div>
+      <div>© 2026 LeadBot. AI chat widgets for insurance agencies.</div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ============================================ -->
+<!-- CHAT WIDGET START                            -->
+<!-- ============================================ -->
+<div id="ic-widget-root"></div>
+
+<style>
+  #ic-widget-root * { box-sizing: border-box; }
+
+  #ic-bubble {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--ic-primary, #1a47e0);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    z-index: 999999;
+    font-size: 26px;
+    border: none;
+    transition: transform 0.15s ease;
+  }
+  #ic-bubble:hover { transform: scale(1.06); }
+
+  #ic-panel {
+    position: fixed;
+    bottom: 96px;
+    right: 24px;
+    width: 340px;
+    max-width: calc(100vw - 32px);
+    max-height: 70vh;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 999999;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  #ic-panel.open { display: flex; }
+
+  #ic-header {
+    background: var(--ic-primary, #1a47e0);
+    color: #fff;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  #ic-header .ic-title { font-weight: 600; font-size: 14px; margin: 0; }
+  #ic-header .ic-sub { font-size: 11px; opacity: 0.85; margin: 2px 0 0; }
+  #ic-close {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px;
+  }
+
+  #ic-messages {
+    flex: 1;
+    padding: 14px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #f7f8fc;
+    min-height: 240px;
+  }
+
+  .ic-bubble-msg {
+    max-width: 85%;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .ic-bot {
+    background: #fff;
+    color: #1a1a1a;
+    align-self: flex-start;
+    border: 1px solid #e5e8f5;
+  }
+  .ic-user {
+    background: var(--ic-primary, #1a47e0);
+    color: #fff;
+    align-self: flex-end;
+  }
+
+  .ic-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-self: flex-start;
+  }
+  .ic-options button {
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 16px;
+    border: 1px solid var(--ic-primary, #1a47e0);
+    background: #fff;
+    color: var(--ic-primary, #1a47e0);
+    cursor: pointer;
+  }
+  .ic-options button:hover {
+    background: var(--ic-primary, #1a47e0);
+    color: #fff;
+  }
+
+  #ic-input-row {
+    display: flex;
+    gap: 8px;
+    padding: 10px;
+    border-top: 1px solid #e5e8f5;
+    background: #fff;
+  }
+  #ic-input-row input {
+    flex: 1;
+    border: 1px solid #d8dceb;
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 13px;
+    outline: none;
+  }
+  #ic-input-row input:focus {
+    border-color: var(--ic-primary, #1a47e0);
+  }
+  #ic-input-row button {
+    background: var(--ic-primary, #1a47e0);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    width: 38px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .ic-summary {
+    background: #e8f7ef;
+    color: #1f6f43;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+</style>
+
+<script>
+(function () {
+
+  // ============================================
+  // CONFIG - edit these values for each client
+  // ============================================
+  const CONFIG = {
+    agencyName: "LeadBot Assistant",
+    primaryColor: "#1a47e0",
+    webhookUrl: "https://hooks.zapier.com/hooks/catch/27927517/435szaj/",   // <-- paste your Zapier "Catch Hook" URL here
+    welcomeMessage: "Hi! I can help you find the right insurance and connect you with a local agent. What type of coverage are you interested in?"
+  };
+
+  document.documentElement.style.setProperty('--ic-primary', CONFIG.primaryColor);
+
+  const steps = [
+    { field: "type", bot: CONFIG.welcomeMessage, options: ["Auto", "Home", "Life", "Health", "Business"] },
+    { field: "name", bot: "Got it. What's your name?" },
+    { field: "phone", bot: "Thanks! What's the best phone number to reach you?" },
+    { field: "zip", bot: "Last thing - what's your zip code, so we match you with a local agent?" }
+  ];
+
+  let step = 0;
+  let started = false;
+  const data = {};
+
+  const root = document.getElementById('ic-widget-root');
+
+  const bubble = document.createElement('button');
+  bubble.id = 'ic-bubble';
+  bubble.innerHTML = '&#128172;';
+  bubble.setAttribute('aria-label', 'Open chat');
+
+  const panel = document.createElement('div');
+  panel.id = 'ic-panel';
+  panel.innerHTML = `
+    <div id="ic-header">
+      <div>
+        <p class="ic-title">${CONFIG.agencyName}</p>
+        <p class="ic-sub">Usually replies instantly</p>
+      </div>
+      <button id="ic-close" aria-label="Close chat">&times;</button>
+    </div>
+    <div id="ic-messages"></div>
+    <div id="ic-input-row">
+      <input id="ic-input" type="text" placeholder="Type your answer..." />
+      <button id="ic-send" aria-label="Send">&#10148;</button>
+    </div>
+  `;
+
+  root.appendChild(bubble);
+  root.appendChild(panel);
+
+  const messages = panel.querySelector('#ic-messages');
+  const input = panel.querySelector('#ic-input');
+  const sendBtn = panel.querySelector('#ic-send');
+  const closeBtn = panel.querySelector('#ic-close');
+  const inputRow = panel.querySelector('#ic-input-row');
+
+  function addBotMessage(text) {
+    const div = document.createElement('div');
+    div.className = 'ic-bubble-msg ic-bot';
+    div.textContent = text;
+    messages.appendChild(div);
+    scrollDown();
+  }
+
+  function addUserMessage(text) {
+    const div = document.createElement('div');
+    div.className = 'ic-bubble-msg ic-user';
+    div.textContent = text;
+    messages.appendChild(div);
+    scrollDown();
+  }
+
+  function addOptions(options) {
+    const row = document.createElement('div');
+    row.className = 'ic-options';
+    options.forEach(opt => {
+      const b = document.createElement('button');
+      b.textContent = opt;
+      b.onclick = () => {
+        row.remove();
+        handleAnswer(opt);
+      };
+      row.appendChild(b);
+    });
+    messages.appendChild(row);
+    scrollDown();
+  }
+
+  function scrollDown() {
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function askStep() {
+    const s = steps[step];
+    addBotMessage(s.bot);
+    if (s.options) addOptions(s.options);
+  }
+
+  function handleAnswer(value) {
+    const s = steps[step];
+    data[s.field] = value;
+    addUserMessage(value);
+    step++;
+    if (step < steps.length) {
+      setTimeout(askStep, 350);
+    } else {
+      setTimeout(finish, 350);
+    }
+  }
+
+  function finish() {
+    inputRow.style.display = 'none';
+
+    const summary = document.createElement('div');
+    summary.className = 'ic-summary';
+    summary.innerHTML =
+      '<strong>Thanks, ' + escapeHtml(data.name || '') + '!</strong><br>' +
+      'Coverage type: ' + escapeHtml(data.type || '') + '<br>' +
+      'Phone: ' + escapeHtml(data.phone || '') + '<br>' +
+      'Zip: ' + escapeHtml(data.zip || '') + '<br><br>' +
+      'A local agent will reach out shortly.';
+    messages.appendChild(summary);
+    scrollDown();
+
+    sendLead(data);
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function sendLead(leadData) {
+    console.log('New insurance lead captured:', leadData);
+
+    if (!CONFIG.webhookUrl) {
+      console.warn('No webhookUrl set - lead was not sent anywhere.');
+      return;
+    }
+
+    fetch(CONFIG.webhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        source: 'leadbot-demo-site',
+        agency: CONFIG.agencyName,
+        timestamp: new Date().toISOString(),
+        ...leadData
+      })
+    }).catch(err => {
+      console.error('Failed to send lead to webhook:', err);
+    });
+  }
+
+  bubble.addEventListener('click', () => {
+    panel.classList.add('open');
+    bubble.style.display = 'none';
+    if (!started) {
+      started = true;
+      askStep();
+    }
+  });
+
+  closeBtn.addEventListener('click', () => {
+    panel.classList.remove('open');
+    bubble.style.display = 'flex';
+  });
+
+  sendBtn.addEventListener('click', () => {
+    const val = input.value.trim();
+    if (!val) return;
+    input.value = '';
+    handleAnswer(val);
+  });
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') sendBtn.click();
+  });
+
+})();
+</script>
+<!-- ============================================ -->
+<!-- CHAT WIDGET END                              -->
+<!-- ============================================ -->
+
+
+<!-- Scroll fade-in animation -->
+<script>
+  const fadeEls = document.querySelectorAll('.fade-up');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.15 });
+  fadeEls.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
